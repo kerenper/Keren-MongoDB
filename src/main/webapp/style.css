@@ -1,0 +1,27 @@
+#navigation {
+	width: 100%;
+	height: 30px;
+	background-color: #999;
+}
+
+#navigation ul {
+	margin: 0px;
+	padding: 0px;
+}
+
+#navigation ul li {
+	display: inline;
+	height: 30px;
+	float: left;
+	list-style: none;
+	margin-left: 15px;
+}
+
+#navigation li a {
+	color: #fff;
+	text-decoration: none;
+}
+
+#navigation li a:hover {
+	text-decoration: underline;
+}
