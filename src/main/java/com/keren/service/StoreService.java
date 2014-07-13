@@ -69,12 +69,11 @@ public class StoreService {
 	}
 	
 	/**
-	 * Removes a product from the product collection and deletes it from the inventory completely
+	 * Deletes a product from the inventory collection
 	 * @param inv
 	 */
 	public void removeProduct(String product) {
 		inventoryDao.deleteFromInventory(product);
-		productDao.deleteProduct(product);
 	}
 
 	/**
@@ -90,8 +89,6 @@ public class StoreService {
 		
 		// For every product id, remove the desired amount from the inventory
 		for (String productId : productAmounts.keySet()) {
-			System.out.println(productId);
-			System.out.println(productAmounts.get(productId));
 			inventoryDao.reduceFromInventory(productId, productAmounts.get(productId));
 		}
 	}
@@ -115,7 +112,7 @@ public class StoreService {
 	 * @param customer - the customer
 	 * @return - order list
 	 */
-	public Collection<Order> findOrdersByCustomer(Customer customer) {
+	public Collection<Order> findOrdersByCustomer(String customer) {
 		return orderDao.findOrdersByCustomer(customer);
 	}
 }

@@ -2,12 +2,14 @@ package com.keren.model;
 
 import java.math.BigInteger;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "inventory")
 public class Inventory {
 	@Id
 	private BigInteger id;
+	@DBRef
 	private Product product;
 	private Integer amount;
 
@@ -33,10 +35,5 @@ public class Inventory {
 
 	public void setAmount(Integer amount) {
 		this.amount = amount;
-	}
-
-	@Override
-	public String toString() {
-		return "Product:" + product + ", amount=" + amount;
 	}
 }

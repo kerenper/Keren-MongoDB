@@ -1,6 +1,9 @@
 package com.keren.model;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
+
 public class OrderDetails {
+	@DBRef
 	private Product product;
 	private Integer amount;
 	

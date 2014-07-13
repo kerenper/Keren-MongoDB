@@ -26,16 +26,12 @@ public class ProductDao {
 			mongoTemplate.createCollection(Product.class);
 		}
 		
+		// If no price was set, it's free! yay!
+		if (product.getPrice() == null) {
+			product.setPrice(0);
+		}
+		
 		mongoTemplate.save(product);
-	}
-	
-	/**
-	 * Remove a product from the product collection
-	 * @param product
-	 */
-	public void deleteProduct(String product) {
-		Query query = new Query(Criteria.where("name").is(product));
-		mongoTemplate.findAndRemove(query, Product.class);
 	}
 	
 	/**

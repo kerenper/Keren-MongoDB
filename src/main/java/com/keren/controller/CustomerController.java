@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
-
 import com.keren.model.Customer;
 import com.keren.service.StoreService;
 
@@ -24,24 +23,24 @@ public class CustomerController {
 	@Autowired
 	private StoreService storeService;
 	
-    @RequestMapping(value = "/customer", method = RequestMethod.GET)  
-	public String getCustomerList(ModelMap model) {  
+    @RequestMapping(value = "/customers", method = RequestMethod.GET)  
+	public String getCustomerList(ModelMap model) {
         model.addAttribute("customerList", storeService.getAllCustomers());  
         return "customers";  
     }  
     
-    @RequestMapping(value = "/customer/save", method = RequestMethod.POST)  
+    @RequestMapping(value = "/customers/save", method = RequestMethod.POST)  
 	public View createCustomer(@ModelAttribute Customer customer, ModelMap model) {
     	if (StringUtils.hasText(customer.getName())) {
-    		customer.setName(customer.getName().trim().toUpperCase());
+    		customer.setName(customer.getName().trim());
     		storeService.updateAddCustomer(customer);
     	} 
-    	return new RedirectView("/Keren/customer");  
+    	return new RedirectView("/Keren/customers");  
     }
         
-    @RequestMapping(value = "/customer/delete", method = RequestMethod.GET)  
+    @RequestMapping(value = "/customers/delete", method = RequestMethod.GET)  
 	public View deleteCustomer(@ModelAttribute Customer customer, ModelMap model) {  
     	storeService.deleteCustomer(customer);  
-        return new RedirectView("/Keren/customer");  
+        return new RedirectView("/Keren/customers");  
     }    
 }

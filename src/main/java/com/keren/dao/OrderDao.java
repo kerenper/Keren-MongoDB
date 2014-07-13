@@ -69,8 +69,8 @@ public class OrderDao {
 	 * @param customer
 	 * @return orders
 	 */
-	public Collection<Order> findOrdersByCustomer(Customer customer) {
-		Query query = new Query(Criteria.where("customer").is(customer.getName()));
+	public Collection<Order> findOrdersByCustomer(String customer) {
+		Query query = new Query(Criteria.where("customer.$id").is(customer));
 		return mongoTemplate.find(query, Order.class);
 	}
 	
