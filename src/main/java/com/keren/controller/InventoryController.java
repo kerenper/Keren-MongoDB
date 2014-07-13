@@ -2,8 +2,6 @@ package com.keren.controller;
 
 import java.util.Collection;
 import java.util.HashMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -25,13 +23,11 @@ import com.keren.service.StoreService;
  */
 @Controller
 public class InventoryController {
-	private static final Logger logger = LoggerFactory
-			.getLogger(InventoryController.class);
-
 	@Autowired
 	private StoreService storeService;
 
 	private HashMap<String, Customer> customers = new HashMap<String, Customer>();
+	private Boolean showAlert = false;
 
 	/**
 	 * Init all list variables in jsp
@@ -40,14 +36,20 @@ public class InventoryController {
 	 */
 	@RequestMapping(value = "/inventory", method = RequestMethod.GET)
 	public String getInventoryList(ModelMap model) {
+		// set all inventory items
 		model.addAttribute("inventoryList", storeService.getInventoryListing());
+		// show deletion error if needed
+		model.addAttribute("deleteAlert", showAlert);
 
+		// init customers
 		Collection<Customer> customerList = storeService.getAllCustomers();
 		for (Customer cust : customerList) {
 			customers.put(cust.getName(), cust);
 		}
 
 		model.addAttribute("customerList", customerList);
+		
+		// go to inventory.jsp
 		return "inventory";
 	}
 
@@ -61,10 +63,17 @@ public class InventoryController {
 	@RequestMapping(value = "/inventory/save", method = RequestMethod.POST)
 	public View createProduct(@ModelAttribute Product product, Integer amount,
 			ModelMap model) {
+		// if a product was entered
 		if (StringUtils.hasText(product.getName())) {
+			// save it
 			product.setName(product.getName().trim());
 			storeService.addProduct(product, amount);
 		}
+		
+		// no need to show the deletion message
+    	showAlert = false;
+		
+		// reload the page
 		return new RedirectView("/Keren/inventory");
 	}
 
@@ -91,6 +100,11 @@ public class InventoryController {
 			// Insert a new order
 			storeService.placeOrder(customers.get(customer), productMap);
 		}
+		
+		// no need to show the deletion message
+    	showAlert = false;
+		
+		// reload the page
 		return new RedirectView("/Keren/inventory");
 	}
 
@@ -102,7 +116,9 @@ public class InventoryController {
 	 */
 	@RequestMapping(value = "/inventory/delete", method = RequestMethod.GET)
 	public View deleteProduct(String product, ModelMap model) {
-		storeService.removeProduct(product);
+		// try to delete the product
+		showAlert = !storeService.removeProduct(product);
+		
 		return new RedirectView("/Keren/inventory");
 	}
 }

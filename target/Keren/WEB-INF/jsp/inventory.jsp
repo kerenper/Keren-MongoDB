@@ -162,7 +162,7 @@
 	<table id="products" class="mainTable">
 		<thead>
 			<tr>
-				<th scope="col">Product Name</th>
+				<th scope="col" width="110px">Product Name</th>
 				<th scope="col">Price</th>
 				<th scope="col">Available</th>
 				<th scope="col" class="column2">Delete?</th>
@@ -172,17 +172,17 @@
 		<tbody>
 			<c:forEach var="inventory" items="${inventoryList}">
 				<tr>
-					<th scope="row" class="column1">${inventory.product.name}</th>
+					<th scope="row" class="column1">${inventory.product}</th>
 					<td>${inventory.product.price}</td>
 					<td id="available_<c:out value="${inventory.amount}" />">${inventory.amount}</td>
 					<th scope="row" class="column2"><input type="button" value="Delete" class="button blue"
-						onclick="window.location='inventory/delete?product=${inventory.product.name}'" />
+						onclick="window.location='inventory/delete?product=${inventory.product}'" />
 					</th>
 					<td>
-						<input type="text" id="amount_<c:out value="${inventory.product.name}" />" size="2" />
+						<input type="text" id="amount_<c:out value="${inventory.product}" />" size="2" />
 					</td>
 					<td class="msgCol">
-						<label id="validationMsg_amount_<c:out value="${inventory.product.name}" />"></label>
+						<label id="validationMsg_amount_<c:out value="${inventory.product}" />"></label>
 					</td>
 				</tr>
 			</c:forEach>
@@ -199,6 +199,10 @@
 			</tr>
 		</tfoot>
 	</table>
+	<c:if test="${deleteAlert == true}">
+		<br>
+		<label class="deleteAlert">Product has related orders, it cannot be deleted.</label>
+	</c:if>
 	<br/>
 	<div class="bottomDiv">
 		<form id="orderForm" action="inventory/order" method="post">

@@ -70,7 +70,7 @@
 							</c:forEach>
 						</table>
 					</td>
-					<th scope="row" class="column1 column3">${order.total}</th>
+					<th scope="row" class="column1 column3">${order.total} $</th>
 				</tr>
 			</c:forEach>
 		</tbody>

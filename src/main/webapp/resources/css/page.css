@@ -17,7 +17,7 @@ body {
 }
 
 .bottomDiv {
-	margin-left: 250px;
+	margin-left: 267px;
 }
 
 .button {
@@ -66,7 +66,6 @@ body {
 }
 
 .mainTable {
-/* 	width: 900px; */
 	border-top: 1px solid #e3f1fe;
 	border-right: none;
 	border-collapse: collapse;
@@ -84,6 +83,7 @@ body {
 
 .mainTable .column3 {
 	text-align: center;
+	padding: 0;
 }
 
 .mainTable .column2 {
@@ -210,4 +210,8 @@ body {
 
 .orders tbody tr td {
 	padding-bottom: 5px;
+}
+
+.deleteAlert {
+	color: red;
 }

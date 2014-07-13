@@ -43,4 +43,13 @@ public class ProductDao {
 		Query query = new Query(Criteria.where("name").is(product));
 		return mongoTemplate.findOne(query, Product.class);
 	}
+	
+	/**
+	 * Removes a product completely
+	 * @param product
+	 */
+	public void removeProduct(String product) {
+		Query query = new Query(Criteria.where("name").is(product));
+		mongoTemplate.findAndRemove(query, Product.class);
+	}
 }

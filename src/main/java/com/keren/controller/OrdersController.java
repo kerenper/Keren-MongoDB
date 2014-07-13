@@ -1,8 +1,5 @@
 package com.keren.controller;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,12 +18,6 @@ public class OrdersController {
 	private final String ALL_CUSTOMERS = "ALL";
 	@Autowired
 	private StoreService storeService;
-	private Collection customerList = new ArrayList();  
-	
-	@PostConstruct
-	public void init() {
-		customerList = storeService.getAllCustomers();
-	}
 
 	@RequestMapping(value = "/orders", method = RequestMethod.GET)  
 	public String getOrderList(String customer, ModelMap model) {  
@@ -38,7 +29,7 @@ public class OrdersController {
     		model.addAttribute("selectedCustomer", ALL_CUSTOMERS);
     	}
     	
-    	model.addAttribute("customerList", customerList);
+    	model.addAttribute("customerList", storeService.getAllCustomers());
         
         return "orders";  
     }  

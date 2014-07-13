@@ -6,21 +6,28 @@
 <meta charset="windows-1255">
 <script>
 	$(document).ready(function() {
-		var selected = $("#navigation ul").children().first();
-		selected.addClass("selected");
+		// set the selected tab as the first
+		var selected = $("#navigation ul").children().first(),
+			selectedClass = "selected";
+		selected.addClass(selectedClass);
 		
+		// whenever a tab is clicked
 		$("#navigation ul li a").click(function() {
 			var $this = $(this);
 			
+			// remove the old tab from being selected
 			if (selected != null) {
-				$(selected).removeClass("selected");
+				$(selected).removeClass(selectedClass);
 			}
 			
+			// set this tab as selected
 			selected =  $this.parent();
-			$this.parent().addClass("selected");
+			$this.parent().addClass(selectedClass);
 		});
 	});
 	
+	// resize the window according to the height of the iframe
+	// this is to avoid double scrolling bars
 	function resizeIframe(obj) {
 	    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
 	  } 

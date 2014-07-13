@@ -58,5 +58,9 @@
 			</c:forEach>
 		</tbody>
 	</table>
+	<c:if test="${deleteAlert == true}">
+		<br>
+		<label class="deleteAlert">Customer has related orders, he cannot be deleted.</label>
+	</c:if>
 </body>
 </html>

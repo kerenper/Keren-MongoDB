@@ -24,8 +24,12 @@ public class InventoryDao {
 	 * @param inv
 	 */
 	public void addUpdateInventory(Inventory inv) {
-		if (!mongoTemplate.collectionExists(Customer.class)) {
-			mongoTemplate.createCollection(Customer.class);
+		if (!mongoTemplate.collectionExists(Inventory.class)) {
+			mongoTemplate.createCollection(Inventory.class);
+		}
+		
+		if (inv.getAmount() == null) {
+			inv.setAmount(0);
 		}
 		
 		mongoTemplate.save(inv);
@@ -37,17 +41,17 @@ public class InventoryDao {
 	 * @param amount - the amount to be removed
 	 */
 	public void reduceFromInventory(String productName, Integer amount) {
-		Query query = new Query(Criteria.where("product.name").is(productName));
+		Query query = new Query(Criteria.where("product.$id").is(productName));
 		Update update = new Update().inc("amount", -amount);
 		mongoTemplate.findAndModify(query, update, Inventory.class);
 	}
 	
 	/**
 	 * Deletes a product from the inventory completely
-	 * @param inv
+	 * @param product
 	 */
 	public void deleteFromInventory(String product) {
-		Query query = new Query(Criteria.where("product.name").is(product));
+		Query query = new Query(Criteria.where("product.$id").is(product));
 		mongoTemplate.findAndRemove(query, Inventory.class);
 	}
 

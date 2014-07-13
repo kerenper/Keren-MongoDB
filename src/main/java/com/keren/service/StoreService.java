@@ -1,6 +1,8 @@
 package com.keren.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +41,14 @@ public class StoreService {
 	 * Delete a customer
 	 * @param customer
 	 */
-	public void deleteCustomer(Customer customer) {
-		customerDao.deleteCustomer(customer);
+	public Boolean deleteCustomer(Customer customer) {
+		// if no orders exist - it's safe to delete this customer
+		if (!orderDao.ordersByCustomerExist(customer.getName())) {
+			customerDao.deleteCustomer(customer);
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/**
@@ -72,8 +80,15 @@ public class StoreService {
 	 * Deletes a product from the inventory collection
 	 * @param inv
 	 */
-	public void removeProduct(String product) {
-		inventoryDao.deleteFromInventory(product);
+	public Boolean removeProduct(String product) {
+		// if no orders exist - it's safe to delete this product
+		if (!orderDao.ordersByProductExist(product)) {
+			inventoryDao.deleteFromInventory(product);
+			productDao.removeProduct(product);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -84,13 +99,32 @@ public class StoreService {
 	 */
 	public void placeOrder(Customer customer,
 			HashMap<String, Integer> productAmounts) {
-		// Add a new order for this customer
-		orderDao.placeOrder(customer, productAmounts);
+		Product currProduct = null;
+		OrderDetails newDetails = null;
+		Collection<OrderDetails> details = new ArrayList<OrderDetails>();
 		
-		// For every product id, remove the desired amount from the inventory
-		for (String productId : productAmounts.keySet()) {
-			inventoryDao.reduceFromInventory(productId, productAmounts.get(productId));
+		// Creating the order
+		Order order = new Order();
+		order.setCustomer(customer);
+		order.setDate(new Date());
+		
+		// Finding and populating the product, and creating the order details accordingly
+		for (String productName : productAmounts.keySet()) {
+			currProduct = productDao.findProductByName(productName);
+			newDetails = new OrderDetails();
+			newDetails.setProduct(currProduct);
+			newDetails.setAmount(productAmounts.get(productName));
+			
+			details.add(newDetails);
+			
+			inventoryDao.reduceFromInventory(productName, productAmounts.get(productName));
 		}
+		
+		// Setting the details to the order
+		order.setDetails(details);
+		
+		// Add a new order for this customer
+		orderDao.placeOrder(order);
 	}
 	
 	/**
